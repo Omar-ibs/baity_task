@@ -13,13 +13,15 @@ class ItemList extends StatelessWidget {
         if (state is ItemListCubitSuccess) {
           return GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 1 / 1.12,
+                  childAspectRatio: MediaQuery.sizeOf(context).width > 800
+                      ? 1.1 / 1.2
+                      : 1 / 1.1,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 5,
                   crossAxisCount:
                       MediaQuery.sizeOf(context).width > 800 ? 2 : 1),
               physics: const BouncingScrollPhysics(),
-              itemCount: 10,
+              itemCount: state.itemsList.length,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
@@ -29,20 +31,20 @@ class ItemList extends StatelessWidget {
                 );
               });
         } else if (state is ItemListCubitFailure) {
-          return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.error_outline,
-                  color: Colors.blue[800],
-                  size: 60,
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Text(state.message),
-              ]);
+          return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Icon(
+              Icons.error_outline,
+              color: Colors.blue[800],
+              size: 80,
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            Text(
+              state.message,
+              textAlign: TextAlign.center,
+            ),
+          ]);
         } else {
           return const Center(child: CircularProgressIndicator());
         }

@@ -2,14 +2,16 @@ import 'package:baity_task/src/core/utils/app_images.dart';
 import 'package:baity_task/src/core/utils/styles.dart';
 import 'package:baity_task/src/features/main_feature/data/models/real_estate.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class DetailsInIcons extends StatelessWidget {
   const DetailsInIcons({
     super.key,
+    required this.height,
+    required this.width,
     required this.realEstate,
   });
   final RealEstate realEstate;
+  final double height, width;
   @override
   Widget build(BuildContext context) {
     List<String> icons = [
@@ -19,15 +21,15 @@ class DetailsInIcons extends StatelessWidget {
       Assets.imagesChair,
       Assets.imagesMaximize,
     ];
-    List<String> details = [
-      realEstate.area.toString(),
-      realEstate.noOfLivingRooms.toString(),
-      realEstate.noOfBedRooms.toString(),
-      realEstate.parkingCapacity.toString(),
-      realEstate.noOfBathRooms.toString(),
-    ];
+    // List<String> details = [
+    //   realEstate.area.toString(),
+    //   realEstate.noOfLivingRooms.toString(),
+    //   realEstate.noOfBedRooms.toString(),
+    //   realEstate.parkingCapacity.toString(),
+    //   realEstate.noOfBathRooms.toString(),
+    // ];
     return SizedBox(
-      height: 30,
+      height: height,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
@@ -47,12 +49,12 @@ class DetailsInIcons extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 5.0),
                       child: index != 0
                           ? Text(
-                              details[index],
+                              '', // details[index],
                               style: Styles.regularStyle16(context)
                                   .copyWith(color: Colors.black),
                             )
                           : Text(
-                              '${details[index]} m2',
+                              '', //${details[index]} m2',
                               style: Styles.regularStyle16(context)
                                   .copyWith(color: Colors.black),
                             ),
@@ -62,8 +64,8 @@ class DetailsInIcons extends StatelessWidget {
                     ),
                     Image.asset(
                       icons[index],
-                      height: 25,
-                      width: 25,
+                      height: height,
+                      width: width,
                     ),
                   ],
                 ),
