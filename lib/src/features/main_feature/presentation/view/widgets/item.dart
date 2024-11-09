@@ -20,7 +20,6 @@ class Item extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final imageHeight = screenWidth > 800 ? 200.0 : 150.0;
-    final iconSize = screenWidth > 800 ? 30.0 : 25.0;
     final spacing = screenWidth > 800 ? 12.0 : 8.0;
 
     return GestureDetector(

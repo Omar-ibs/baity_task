@@ -4,5 +4,5 @@ import 'package:dartz/dartz.dart';
 
 abstract class HomeRepo {
   Future<Either<Failure, List<RealEstate>>> fetchItems();
-  Future<Either<Failure, List<RealEstate>>> filterItems(RealEstate options);
+  Future<Either<Failure, List<RealEstate>>> filterItems();
 }

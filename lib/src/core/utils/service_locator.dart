@@ -7,6 +7,7 @@ final getIt = GetIt.instance;
 
 class ServiceLocator {
   void setup() {
+    getIt.registerLazySingleton<ApiService>(() => ApiService());
     getIt.registerLazySingleton<HomeRepo>(
         () => HomeRepoImpl(getIt<ApiService>()));
   }

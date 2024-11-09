@@ -1,7 +1,5 @@
-import 'package:baity_task/src/core/utils/app_images.dart';
 import 'package:baity_task/src/core/utils/styles.dart';
 import 'package:baity_task/src/features/main_feature/data/models/real_estate.dart';
-import 'package:baity_task/src/features/main_feature/presentation/view/widgets/details_in_icons.dart';
 import 'package:baity_task/src/features/main_feature/presentation/view/widgets/first_part_of_details_page.dart';
 import 'package:baity_task/src/features/main_feature/presentation/view/widgets/second_part_of_details_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';

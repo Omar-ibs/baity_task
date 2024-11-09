@@ -1,12 +1,11 @@
 import 'package:baity_task/src/core/utils/service_locator.dart';
 import 'package:baity_task/src/features/main_feature/data/models/real_estate.dart';
 import 'package:baity_task/src/features/main_feature/data/repos/home_repo.dart';
-import 'package:baity_task/src/features/main_feature/data/repos/home_repo_impl.dart';
-import 'package:baity_task/src/features/main_feature/presentation/view/widgets/filter_options.dart';
 import 'package:baity_task/src/features/main_feature/presentation/view/widgets/filter_screen.dart';
 import 'package:baity_task/src/features/main_feature/presentation/view/widgets/items_list.dart';
 import 'package:baity_task/src/features/main_feature/presentation/view_model/cubit/item_list_cubit_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainFeature extends StatefulWidget {
@@ -20,7 +19,6 @@ class _MainFeatureState extends State<MainFeature> {
   List<RealEstate> realEstateList = [];
   bool isLoading = false;
   HomeRepo homeRepo = getIt.get<HomeRepo>();
-  // Fetch items based on filter options
 
   @override
   Widget build(BuildContext context) {
@@ -37,21 +35,15 @@ class _MainFeatureState extends State<MainFeature> {
               ),
               IconButton(
                 onPressed: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const FilterPage(
-                          // onApplyFilter: (filterOptions) {
-                          // final filters = {
-                          //   '/City': filterOptions.city!.id,
-                          //   '/OfferType': filterOptions.offerType,
-                          //   '/SubCategory': filterOptions.category!.id,
-                          // };
-                          //Navigator.pop(context, filterOptions);
-                          //   },
-                          ),
-                    ),
-                  );
+                  await Navigator.push(context,
+                      MaterialPageRoute(builder: (context) {
+                    return Animate(
+                      effects: [
+                        SlideEffect(begin: Offset(1, 0), end: Offset(0, 0)),
+                      ],
+                      child: FilterPage(),
+                    );
+                  }));
                 },
                 icon: const Icon(
                   Icons.filter_list_outlined,

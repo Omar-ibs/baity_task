@@ -1,9 +1,11 @@
 import 'package:baity_task/src/core/utils/styles.dart';
+import 'package:baity_task/src/features/main_feature/presentation/view/widgets/category_list_view.dart';
+import 'package:baity_task/src/features/main_feature/presentation/view/widgets/cities_choose.dart';
+import 'package:baity_task/src/features/main_feature/presentation/view/widgets/selecting_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class FilterPage extends StatefulWidget {
-  //final Function onApplyFilter;
-
   const FilterPage({
     super.key,
   });
@@ -13,9 +15,11 @@ class FilterPage extends StatefulWidget {
 }
 
 class _FilterPageState extends State<FilterPage> {
+  bool isReset = false;
   String offerType = 'Sale';
   String? selectedCategory;
-  String paymentMethod = 'All';
+  String? selectedSubCategory;
+  String paymentMethod = 'All.';
   String city = 'Baghdad';
   String publisherType = 'All';
 
@@ -67,17 +71,7 @@ class _FilterPageState extends State<FilterPage> {
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: screenWidth * 0.045)),
-              Wrap(
-                spacing: 8.0,
-                runSpacing: 8.0,
-                children: [
-                  _buildCategoryButton(
-                      "Residential", "Residential", screenWidth),
-                  _buildCategoryButton(
-                      "Building Complex", "Building Complex", screenWidth),
-                  _buildCategoryButton("Commercial", "Commercial", screenWidth),
-                ],
-              ),
+              CategoryListView(isReset: isReset),
               SizedBox(height: screenHeight * 0.02),
 
               // Payment Methods Section
@@ -89,7 +83,7 @@ class _FilterPageState extends State<FilterPage> {
                 spacing: 8.0,
                 children: [
                   _buildToggleButton(
-                      "All", paymentMethod == "All", screenWidth),
+                      "All.", paymentMethod == "All.", screenWidth),
                   _buildToggleButton(
                       "Cash", paymentMethod == "Cash", screenWidth),
                   _buildToggleButton("Installments",
@@ -103,13 +97,25 @@ class _FilterPageState extends State<FilterPage> {
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: screenWidth * 0.045)),
-              Chip(
-                label: Text(city),
-                onDeleted: () {
+              GestureDetector(
+                onTap: () async {
+                  final selectedCity = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return Animate(effects: const [
+                          SlideEffect(begin: Offset(1, 0), end: Offset(0, 0)),
+                        ], child: const CitiesChoose());
+                      },
+                    ),
+                  );
                   setState(() {
-                    city = '';
+                    city = selectedCity;
                   });
                 },
+                child: Chip(
+                  label: Text(city),
+                ),
               ),
               SizedBox(height: screenHeight * 0.02),
 
@@ -137,25 +143,28 @@ class _FilterPageState extends State<FilterPage> {
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: screenWidth * 0.045)),
-              Slider(
-                value: 50,
-                min: 0,
-                max: 100,
-                onChanged: (value) {
-                  setState(() {
-                    // Handle area value
-                  });
-                },
+              const SelectingField(
+                isSelected: false,
+                text: 'Select Real Estate Area',
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              Text("Price",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: screenWidth * 0.045)),
+              const SelectingField(
+                isSelected: false,
+                text: 'Select Price Range',
               ),
             ],
           ),
         ),
       ),
       bottomNavigationBar: Container(
-        height: 100,
+        height: 80,
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -166,31 +175,42 @@ class _FilterPageState extends State<FilterPage> {
                       // Reset filters
                       offerType = 'Sale';
                       selectedCategory = null;
-                      paymentMethod = 'All';
+                      isReset = true;
+                      paymentMethod = 'All.';
                       city = 'Baghdad';
                       publisherType = 'All';
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[300],
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          side: BorderSide(
+                            color: Colors.grey[400]!,
+                          ))),
+                  child: Text(
+                    "Reset",
+                    style: Styles.mediumStyle20(context)
+                        .copyWith(color: Colors.black),
                   ),
-                  child: const Text("Reset"),
                 ),
               ),
               SizedBox(width: screenWidth * 0.04),
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    // widget.onApplyFilter({
-                    //   "offerType": offerType,
-                    //   "category": selectedCategory,
-                    //   "paymentMethod": paymentMethod,
-                    //   "city": city,
-                    //   "publisherType": publisherType,
-                    // });
                     Navigator.pop(context);
                   },
-                  child: const Text("Results 3217"),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xff042f46),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      )),
+                  child: Text(
+                    "Results",
+                    style: Styles.mediumStyle20(context)
+                        .copyWith(color: Colors.white),
+                  ),
                 ),
               ),
             ],
@@ -200,14 +220,13 @@ class _FilterPageState extends State<FilterPage> {
     );
   }
 
-  // Responsive Toggle Button
   Widget _buildToggleButton(String label, bool isSelected, double screenWidth) {
     return GestureDetector(
       onTap: () {
         setState(() {
           if (label == "Sale" || label == "Rent") {
             offerType = label;
-          } else if (label == "All" ||
+          } else if (label == "All." ||
               label == "Cash" ||
               label == "Installments") {
             paymentMethod = label;

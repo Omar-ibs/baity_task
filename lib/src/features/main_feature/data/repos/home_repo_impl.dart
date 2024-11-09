@@ -37,8 +37,7 @@ class HomeRepoImpl implements HomeRepo {
 
       //if there is no cached data we will fetch from the API
       List<RealEstate> itemsList = [];
-      var response =
-          (await apiService.get('/RealEstate', null))["payload"] as List;
+      var response = (await apiService.get())["payload"] as List;
       itemsList = response.map((v) => RealEstate.fromJson(v)).toList();
       prefs.setString(_fetchItemsCacheKey,
           json.encode(itemsList.map((e) => e.toJson()).toList()));
@@ -52,37 +51,8 @@ class HomeRepoImpl implements HomeRepo {
   }
 
   @override
-  Future<Either<Failure, List<RealEstate>>> filterItems(
-      RealEstate options) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final cacheKey = _generateFilterCacheKey(options);
-      // Prepare query parameters based on selected filters
-      if (prefs.containsKey(cacheKey)) {
-        final cachedData = prefs.getString(cacheKey);
-        final List decodedData = json.decode(cachedData!);
-        final cachedItems =
-            decodedData.map((e) => RealEstate.fromJson(e)).toList();
-        return Right(cachedItems);
-      }
-
-      Map<String, dynamic> queryParams = {
-        if (options.city!.id != null) '/City': options.city!.id,
-        if (options.offerType != null) '/OfferType': options.offerType,
-        if (options.subCategory!.id != null)
-          '/SubCategory': options.subCategory!.id,
-      };
-
-      var response =
-          (await apiService.get('/RealEstate', queryParams))['payload'] as List;
-      List<RealEstate> filteredItems =
-          response.map((v) => RealEstate.fromJson(v)).toList();
-      prefs.setString(
-          cacheKey, json.encode(filteredItems.map((e) => e.toJson()).toList()));
-      return Right(filteredItems);
-    } on DioException catch (error) {
-      return Left(ServerFailure.fromDioError(error));
-    }
+  Future<Either<Failure, List<RealEstate>>> filterItems() {
+    throw UnimplementedError();
   }
 
   bool _isCacheExpired(String? timestampStr) {

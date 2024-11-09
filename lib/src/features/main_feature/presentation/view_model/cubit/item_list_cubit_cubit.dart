@@ -1,3 +1,4 @@
+import 'package:baity_task/src/features/main_feature/data/models/city.dart';
 import 'package:baity_task/src/features/main_feature/data/models/real_estate.dart';
 import 'package:baity_task/src/features/main_feature/data/repos/home_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,5 +16,14 @@ class ItemListCubitCubit extends Cubit<ItemListCubitState> {
     response.fold(
         (fail) => emit(ItemListCubitFailure(message: fail.errMessage)),
         (items) => emit(ItemListCubitSuccess(itemsList: items)));
+  }
+
+  Future<void> fetchFilteredItems() async {
+    emit(ItemListCubitLoading());
+    final result = await homeRepo.filterItems();
+    result.fold(
+      (fail) => emit(ItemListCubitFailure(message: fail.errMessage)),
+      (items) => emit(ItemListCubitSuccess(itemsList: items)),
+    );
   }
 }
